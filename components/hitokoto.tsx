@@ -16,20 +16,16 @@ interface HitokotoResponse {
 }
 
 const DEFAULT_INTERVAL = 60
-const MAX_RETRIES = 3
-const RETRY_DELAY = 3000 // 3秒后重试
 
 export function Hitokoto() {
   const [quote, setQuote] = useState<string>(':D 一言获取中...')
-  const [uuid, setUuid] = useState<string>('')
   const [quoteFrom, setQuoteFrom] = useState<string>('')
   const [interval, setIntervalValue] = useState(DEFAULT_INTERVAL)
   const [showSettings, setShowSettings] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const timer = useRef<NodeJS.Timeout | null>(null)
-  const retryCount = useRef(0)
 
-  const fetchQuote = useCallback(async (retry = 0): Promise<void> => {
+  const fetchQuote = useCallback(async (): Promise<void> => {
     setIsLoading(true)
     try {
       const response = await fetch('https://v1.hitokoto.cn?c=d&c=i&c=k')
@@ -38,10 +34,8 @@ export function Hitokoto() {
       }
       const data: HitokotoResponse = await response.json()
       setQuote(data.hitokoto)
-      setQuoteFrom(data.from) // 获取出处
-      setUuid(data.uuid)
-      retryCount.current = 0
-    } catch (error) {
+      setQuoteFrom(data.from)
+    } catch {
       // 错误处理
     } finally {
       setIsLoading(false)
@@ -53,7 +47,7 @@ export function Hitokoto() {
     timer.current = setInterval(() => {
       fetchQuote()
     }, interval * 1000)
-    
+
     return () => {
       if (timer.current) clearInterval(timer.current)
     }
@@ -69,14 +63,14 @@ export function Hitokoto() {
   return (
     <div className="mt-16 text-center relative">
       <div
-      className={`cursor-pointer ${isLoading ? 'opacity-50' : ''}`}
-      onClick={() => setShowSettings(!showSettings)}
-    >
-      <div className="flex justify-between items-center p-6 bg-white/5 backdrop-blur-sm rounded-lg">
-        <span className="text-2xl text-white">{quote}</span>
-        <span className="text-2xl text-white">——{quoteFrom}</span>
+        className={`cursor-pointer ${isLoading ? 'opacity-50' : ''}`}
+        onClick={() => setShowSettings(!showSettings)}
+      >
+        <div className="flex justify-between items-center p-6 bg-white/5 backdrop-blur-sm rounded-lg">
+          <span className="text-2xl text-white">{quote}</span>
+          <span className="text-2xl text-white">——{quoteFrom}</span>
+        </div>
       </div>
-    </div>
       {showSettings && (
         <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-lg text-white">
           <div className="flex items-center space-x-4">
