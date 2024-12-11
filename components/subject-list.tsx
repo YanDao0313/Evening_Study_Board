@@ -42,7 +42,7 @@ export function SubjectList() {
   }
 
   return (
-    <div className="space-y-6 text-2xl">
+    <div className="space-y-6 text-3xl">
       {subjects.map((subject, index) => (
         <div key={index} className="text-white flex items-center space-x-4 p-6 bg-white/5 backdrop-blur-sm rounded-lg">
           <span className="w-24 font-bold">{subject.name}：</span>

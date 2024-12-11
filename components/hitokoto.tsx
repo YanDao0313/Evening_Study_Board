@@ -67,7 +67,7 @@ export function Hitokoto() {
         onClick={() => setShowSettings(!showSettings)}
       >
         <div className="flex justify-between items-center p-6 bg-white/5 backdrop-blur-sm rounded-lg">
-          <span className="text-2xl text-white">{quote}</span>
+          <span className="text-3xl text-white">{quote}</span>
           <span className="text-2xl text-white">——{quoteFrom}</span>
         </div>
       </div>
