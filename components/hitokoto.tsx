@@ -28,7 +28,7 @@ export function Hitokoto() {
   const fetchQuote = useCallback(async (): Promise<void> => {
     setIsLoading(true)
     try {
-      const response = await fetch('https://v1.hitokoto.cn?c=d&c=i&c=k')
+      const response = await fetch('https://v1.hitokoto.cn?c=i&c=k')
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
