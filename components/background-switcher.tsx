@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Image as ImageIcon, Upload, RefreshCw, X } from 'lucide-react'
 
 // 背景类型枚举
@@ -80,26 +80,8 @@ export function BackgroundSwitcher({
   const [isUpdating, setIsUpdating] = useState(false)
   const [lastUpdateAttempt, setLastUpdateAttempt] = useState<number>(0)
 
-  // 初始化时从本地存储加载设置
-  useEffect(() => {
-    const storedSettings = getStoredSettings()
-    setSettings(storedSettings)
-    
-    // 如果是Bing背景且需要更新，自动更新
-    if (storedSettings.type === BackgroundType.BING && shouldUpdateBingImage(storedSettings.lastUpdated)) {
-      const now = Date.now()
-      // 确保两次更新间隔至少1分钟
-      if (now - lastUpdateAttempt > 60000) {
-        handleTypeChange(BackgroundType.BING)
-        setLastUpdateAttempt(now)
-      }
-    } else {
-      onBackgroundChange(storedSettings)
-    }
-  }, [onBackgroundChange, lastUpdateAttempt])
-
   // 处理背景类型变更
-  const handleTypeChange = async (type: BackgroundType, forceUpdate: boolean = false) => {
+  const handleTypeChange = useCallback(async (type: BackgroundType, forceUpdate: boolean = false) => {
     if (isUpdating) return
     
     setIsUpdating(true)
@@ -123,7 +105,25 @@ export function BackgroundSwitcher({
     saveSettings(newSettings)
     onBackgroundChange(newSettings)
     setIsUpdating(false)
-  }
+  }, [isUpdating, settings, onBackgroundChange])
+
+  // 初始化时从本地存储加载设置
+  useEffect(() => {
+    const storedSettings = getStoredSettings()
+    setSettings(storedSettings)
+    
+    // 如果是Bing背景且需要更新，自动更新
+    if (storedSettings.type === BackgroundType.BING && shouldUpdateBingImage(storedSettings.lastUpdated)) {
+      const now = Date.now()
+      // 确保两次更新间隔至少1分钟
+      if (now - lastUpdateAttempt > 60000) {
+        handleTypeChange(BackgroundType.BING)
+        setLastUpdateAttempt(now)
+      }
+    } else {
+      onBackgroundChange(storedSettings)
+    }
+  }, [onBackgroundChange, lastUpdateAttempt, handleTypeChange])
 
   // 处理本地图片上传
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

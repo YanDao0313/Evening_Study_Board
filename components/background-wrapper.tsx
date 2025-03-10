@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { BackgroundSwitcher, BackgroundType, BackgroundSettings } from './background-switcher'
 import { FullscreenButton } from './fullscreen-button'
@@ -9,6 +9,7 @@ import { FullscreenButton } from './fullscreen-button'
 const DEFAULT_BACKGROUND = '/wallhaven-ex55o8-zipped.jpg'
 
 export function BackgroundWrapper() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [backgroundSettings, setBackgroundSettings] = useState<BackgroundSettings>({
     type: BackgroundType.DEFAULT
   })
