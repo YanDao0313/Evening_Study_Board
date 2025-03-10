@@ -269,7 +269,7 @@ export function BackgroundSwitcher({
                 <span>{isUpdating ? '更新中...' : '刷新图片'}</span>
               </button>
               <p className="mt-2 text-xs text-white/50 text-center">
-                每日0:10自动更新 · 图片来源: Bing每日一图
+                每日0:10自动更新 · 图片来源: 微软必应
               </p>
             </div>
           )}
